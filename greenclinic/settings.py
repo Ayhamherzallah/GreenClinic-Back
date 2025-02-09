@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'cloudinary',
     'corsheaders',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +43,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # Ensure CORS Middleware is separate
 ]
+
+# DRF Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 ROOT_URLCONF = 'greenclinic.urls'
 

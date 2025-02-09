@@ -4,8 +4,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from . import models
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 from .serializers import AppointmentSerializer, TestimonialSerializer, BeforeAfterSwiperSerializer
 
+@extend_schema(request=AppointmentSerializer)
 @api_view(['GET','POST'])
 def appointment_list(request):
     if request.method == 'GET':
@@ -20,6 +22,7 @@ def appointment_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=AppointmentSerializer)
 @api_view(['GET','PUT','DELETE'])
 def appointment_detail(request,pk):
 
@@ -42,6 +45,7 @@ def appointment_detail(request,pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(request=TestimonialSerializer)
 @api_view(['GET','POST'])
 def testimonial_list(request):
     if request.method == 'GET':
@@ -56,6 +60,7 @@ def testimonial_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=TestimonialSerializer)
 @api_view(['GET','PUT','DELETE'])
 def testimonial_detail(request, pk):
 
@@ -78,6 +83,7 @@ def testimonial_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(request=BeforeAfterSwiperSerializer)
 @api_view(['Get','POST'])
 def beforeafterswiper_list(request):
     if request.method == 'GET':
@@ -92,6 +98,7 @@ def beforeafterswiper_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=BeforeAfterSwiperSerializer)
 @api_view(['GET','PUT','DELETE'])
 def beforeafterswiper_detail(request, pk):
 

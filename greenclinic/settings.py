@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinic',
-    'rest_framework'
+    'rest_framework',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -75,13 +76,16 @@ WSGI_APPLICATION = 'greenclinic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+import dj_database_url
+import os
 
+
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://postgres:yXAYdpBoTwaTBVolGdwRoWzZXLDAHbcl@monorail.proxy.rlwy.net:31743/railway'
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -123,3 +127,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CLOUDINARY = {
+    'cloud_name': 'doda8ylux',
+    'api_key': '686594864282927',
+    'api_secret': 'Mn4ytMqtWPv0Srw0DbEl3-1FQ4A',
+}

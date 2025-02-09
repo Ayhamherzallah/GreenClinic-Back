@@ -33,13 +33,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware'
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # Correct CSRF Middleware
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Ensure CORS Middleware is separate
 ]
 
 ROOT_URLCONF = 'greenclinic.urls'

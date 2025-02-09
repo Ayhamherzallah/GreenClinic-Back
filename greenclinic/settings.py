@@ -1,5 +1,4 @@
 from pathlib import Path
-import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -126,4 +125,3 @@ CLOUDINARY = {
     'api_secret': 'Mn4ytMqtWPv0Srw0DbEl3-1FQ4A',
 }
 
-django_heroku.settings(locals())

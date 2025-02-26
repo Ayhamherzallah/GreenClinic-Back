@@ -1,14 +1,18 @@
 from django.core.serializers import serialize
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
 from . import models
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from .serializers import AppointmentSerializer, TestimonialSerializer, BeforeAfterSwiperSerializer
 
+
 @extend_schema(request=AppointmentSerializer)
 @api_view(['GET','POST'])
+@permission_classes([AllowAny])
 def appointment_list(request):
     if request.method == 'GET':
         appointments= models.Appointment.objects.all()
@@ -24,8 +28,8 @@ def appointment_list(request):
 
 @extend_schema(request=AppointmentSerializer)
 @api_view(['GET','PUT','DELETE'])
-def appointment_detail(request,pk):
-
+@permission_classes([AllowAny])
+def appointment_detail(request, pk):
     try:
         appointment = models.Appointment.objects.get(pk = pk)
     except models.Appointment.DoesNotExist:
@@ -47,6 +51,7 @@ def appointment_detail(request,pk):
 
 @extend_schema(request=TestimonialSerializer)
 @api_view(['GET','POST'])
+@permission_classes([AllowAny])
 def testimonial_list(request):
     if request.method == 'GET':
         testimonials = models.Testimonial.objects.all()
@@ -62,6 +67,7 @@ def testimonial_list(request):
 
 @extend_schema(request=TestimonialSerializer)
 @api_view(['GET','PUT','DELETE'])
+@permission_classes([AllowAny])
 def testimonial_detail(request, pk):
 
     try:
@@ -85,6 +91,7 @@ def testimonial_detail(request, pk):
 
 @extend_schema(request=BeforeAfterSwiperSerializer)
 @api_view(['Get','POST'])
+@permission_classes([AllowAny])
 def beforeafterswiper_list(request):
     if request.method == 'GET':
         swipers = models.BeforeAfterSwiper.objects.all()
@@ -100,6 +107,7 @@ def beforeafterswiper_list(request):
 
 @extend_schema(request=BeforeAfterSwiperSerializer)
 @api_view(['GET','PUT','DELETE'])
+@permission_classes([AllowAny])
 def beforeafterswiper_detail(request, pk):
 
     try:

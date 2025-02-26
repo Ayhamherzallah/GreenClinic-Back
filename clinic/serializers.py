@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import  Appointment, Testimonial, BeforeAfterSwiper
+from .models import Appointment, Testimonial, BeforeAfterSwiper
+
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,4 +1,10 @@
 from pathlib import Path
+import dj_database_url
+import os
+from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,10 +35,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'cloudinary',
     'corsheaders',
+    'storages',  # For DigitalOcean Spaces
     'drf_spectacular',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Ensure CORS Middleware is separate
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -41,12 +50,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # Ensure CORS Middleware is separate
 ]
 
 # DRF Configuration
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 ROOT_URLCONF = 'greenclinic.urls'
@@ -71,9 +90,6 @@ WSGI_APPLICATION = 'greenclinic.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-import dj_database_url
-import os
 
 
 
@@ -117,8 +133,47 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# Manually load environment variables
+env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+
+if os.path.exists(env_file):
+    with open(env_file) as f:
+        for line in f:
+            if line.strip() and not line.startswith("#"):  # Ignore empty lines and comments
+                key, value = line.strip().split("=", 1)  # Split by first '=' only
+                os.environ[key] = value  # Set environment variable
+
+
+# DigitalOcean Spaces Configuration
+AWS_ACCESS_KEY_ID = "DO801LBXMMR3YQH7QTK8"
+AWS_SECRET_ACCESS_KEY = "mVZtTlHATh2Ju5nfGqSpAV5x2J8QHXWLfCKX5DXUV8A"
+AWS_STORAGE_BUCKET_NAME = "clicksorderingsystem"
+AWS_S3_ENDPOINT_URL = f"https://nyc3.digitaloceanspaces.com"
+AWS_REGION = "nyc3"
+
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL.replace('https://', '')}"
+
+
+
+AWS_DEFAULT_ACL = None  # Prevents objects from being private
+AWS_QUERYSTRING_AUTH = False  # Removes authentication tokens from URLs
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # Cache files for faster load times
+    'ACL': 'public-read',  # This ensures uploaded files are publicly accessible
+}
+
+# Add WebP to the allowed content types
+FILE_UPLOAD_HANDLERS = [
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+
+
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Add this line
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 
 
 # Default primary key field type
@@ -128,9 +183,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CLOUDINARY = {
-    'cloud_name': 'doda8ylux',
-    'api_key': '686594864282927',
-    'api_secret': 'Mn4ytMqtWPv0Srw0DbEl3-1FQ4A',
-}
+# CLOUDINARY = {
+#     'cloud_name': 'doda8ylux',
+#     'api_key': '686594864282927',
+#     'api_secret': 'Mn4ytMqtWPv0Srw0DbEl3-1FQ4A',
+# }
 

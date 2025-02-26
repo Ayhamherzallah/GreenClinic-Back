@@ -2,6 +2,7 @@ from django.db import models
 from cloudinary.models import CloudinaryField
 
 
+
 class Appointment(models.Model):
     client_name = models.CharField(max_length=200)
     phone_num = models.CharField(max_length=200,null=True,blank=True)
@@ -21,7 +22,7 @@ class Testimonial(models.Model):
     )
 
     client_name = models.CharField(max_length=200)
-    profile_image = CloudinaryField('image', null=True,blank=True)
+    profile_image = models.ImageField( null=True,blank=True)
     service = models.CharField(max_length=255, null=True, blank=True)
     review = models.TextField()
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=5.0)
@@ -33,6 +34,7 @@ class Testimonial(models.Model):
 
 
 class BeforeAfterSwiper(models.Model):
-    before_image = CloudinaryField('image', null=True,blank=True)
-    after_image = CloudinaryField('image', null=True,blank=True)
+    before_image = models.ImageField(null=True,blank=True)
+    after_image = models.ImageField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
